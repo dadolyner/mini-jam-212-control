@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://rd54mb8xwesb" path="res://src/main.gd" id="1_5q4o7"]
 [ext_resource type="Texture2D" uid="uid://cn0ncdx48w2d7" path="res://assets/Pixel Adventure/Background/Pink.png" id="1_eewff"]
 [ext_resource type="Texture2D" uid="uid://raegpp2k2bw6" path="res://assets/sprites/castle.png" id="2_gh0ne"]
+[ext_resource type="PackedScene" uid="uid://dcacbpk0wusy4" path="res://src/ancient_demon/demon.tscn" id="4_3cfgd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gh0ne"]
 size = Vector2(2269, 70)
@@ -12,13 +13,6 @@ size = Vector2(53, 1426)
 
 [node name="Main" type="Node2D" unique_id=464101160]
 script = ExtResource("1_5q4o7")
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=343642038]
-position = Vector2(577, 322)
-limit_left = 0
-limit_top = 0
-limit_right = 1280
-limit_bottom = 720
 
 [node name="zgori" type="Area2D" parent="." unique_id=844532523]
 
@@ -73,14 +67,5 @@ texture = ExtResource("2_gh0ne")
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=1330518771]
 position = Vector2(395, 206)
-[ext_resource type="PackedScene" uid="uid://dcacbpk0wusy4" path="res://src/ancient_demon/demon.tscn" id="1_eewff"]
-[ext_resource type="Texture2D" uid="uid://b1ry8447yigkt" path="res://resources/land.png" id="1_gh0ne"]
 
-[node name="Main" type="Node2D" unique_id=464101160]
-
-[node name="TextureRect" type="TextureRect" parent="." unique_id=885781763]
-offset_right = 3195.0
-offset_bottom = 1944.0
-texture = ExtResource("1_gh0ne")
-
-[node name="Demon" parent="." unique_id=1610083175 instance=ExtResource("1_eewff")]
+[node name="Demon" parent="." unique_id=1610083175 instance=ExtResource("4_3cfgd")]

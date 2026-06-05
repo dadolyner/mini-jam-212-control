@@ -6,6 +6,8 @@ var player_state = IDLE
 @export var player_acceleration: float = 4000.0
 @export var player_friction: float = 5000.0
 @export var animated_sprite: AnimatedSprite2D = null
+@export var player_sprite: Sprite2D = null
+
 
 var input: Vector2
 
@@ -24,6 +26,7 @@ func move(delta: float) -> void:
 		apply_movement(direction * player_acceleration * delta)
 		animated_sprite.play("run")
 		animated_sprite.flip_h = direction.x < 0
+		player_sprite.flip_h = direction.x < 0
 
 	move_and_slide()
 	

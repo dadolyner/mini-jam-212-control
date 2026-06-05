@@ -181,10 +181,11 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gk35p"]
 
-[node name="Demon" type="CharacterBody2D" unique_id=1610083175 node_paths=PackedStringArray("animated_sprite")]
-scale = Vector2(10, 10)
+[node name="Demon" type="CharacterBody2D" unique_id=1610083175 node_paths=PackedStringArray("animated_sprite", "player_sprite")]
+scale = Vector2(5, 5)
 script = ExtResource("1_egqfa")
 animated_sprite = NodePath("AnimatedSprite2D")
+player_sprite = NodePath("Sprite2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2045529439]
 visible = false
