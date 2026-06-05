@@ -8,17 +8,30 @@ const _TILE_EDGE  = Rect2(634,  30,  266, 384)
 # ~18 px world — slightly smaller than NPC bodies (~24 px wide capsule)
 # 3 px overlap between tiles eliminates the black seams
 const _TILE_SCALE = 0.20
-const _FLOOR_STEP = 44.0   # tile display size (36) minus 3 px overlap
+const _FLOOR_STEP = 44.0
 const _EDGE_STEP  = 44.0
 
-const _MAP_L = -851.0
-const _MAP_R = 1317.0
-const _MAP_T = -96.0
-const _MAP_B = 1207.0
+const _MAP_L = -3000.0
+const _MAP_R =  4000.0
+const _MAP_T = -2500.0
+const _MAP_B =  3500.0
+
+# Corridor walls — must match StaticBody2D shapes in main.tscn
+const _WALL_COLOR := Color(0.28, 0.28, 0.32)
+const _WALLS: Array = [
+	Rect2(  400, -930, 1000, 60),   # WallA — upper horizontal
+	Rect2(-1100, 1370,  800, 60),   # WallB — mid-left horizontal
+	Rect2( 1770, -400,   60, 1000), # WallC — center-right vertical
+	Rect2( 1850, 1770,  700, 60),   # WallD — lower-right horizontal
+	Rect2(-1030, -800,   60, 800),  # WallE — upper-left vertical
+	Rect2(  950, 2370,  900, 60),   # WallF — lower horizontal
+	Rect2( 2770, -700,   60, 600),  # WallG — upper-right vertical
+	Rect2( -150, -830,  500, 60),   # WallH — upper-center horizontal
+]
 
 var _floor_dest: Array[Rect2] = []
 var _floor_src:  Array[Rect2] = []
-var _edges: Array = []   # [[Vector2 pos, float angle], ...]
+var _edges: Array = []
 
 
 func _ready() -> void:
@@ -73,4 +86,8 @@ func _draw() -> void:
 		draw_set_transform(e[0], e[1], Vector2.ONE)
 		draw_texture_rect_region(_TILESET, half_dest, _TILE_EDGE)
 
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)  # reset
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+	# Corridor walls — dark stone bands matching StaticBody2D shapes in main.tscn
+	for wall in _WALLS:
+		draw_rect(wall, _WALL_COLOR)

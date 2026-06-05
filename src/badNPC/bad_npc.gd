@@ -1,6 +1,6 @@
 extends "res://src/goodNPC/good_npc.gd"
 
-const FLEE_SPEED := SPEED * 1.3
+const FLEE_SPEED := SPEED * 1.6
 const FLEE_DURATION := 1.5
 const FLEE_REACTION_DELAY := 0.2
 const RALLY_RADIUS := 100.0
