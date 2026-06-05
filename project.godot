@@ -22,6 +22,7 @@ buses/default_bus_layout=""
 [autoload]
 
 SoundManager="*res://src/autoload/sound_manager.gd"
+GameManager="*uid://7qncl0ibeiyi"
 
 [display]
 
