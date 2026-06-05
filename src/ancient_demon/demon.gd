@@ -18,22 +18,30 @@ var corrupting: bool = false
 var lines: Array[Line2D] = []
 var corruption_polygon: PackedVector2Array
 var corruption_drain_rate: float = 10.0
+var corruption_timer: float = 0.0
+@export var corruption_duration: float = 5.0
 
 func _physics_process(delta: float) -> void:
 	move(delta)
 
-	if Input.is_action_just_pressed("summon"):
-		spawn_minion()
+	if not corrupting:
+		if Input.is_action_just_pressed("summon"):
+			spawn_minion()
 
-	if Input.is_action_just_pressed("corrupt"):
-		if minions.size() >= 3 and not corrupting:
-			connect_minions()
+		if Input.is_action_just_pressed("corrupt") and minions.size() >= 3:
+			start_corruption()
 
-	if corrupting and corruption_polygon.size() >= 3:
-		for child in get_parent().get_children():
-			var npc: Npc = child as Npc
-			if npc and npc.team == 0 and Geometry2D.is_point_in_polygon(npc.position, corruption_polygon):
-				npc.take_drain(corruption_drain_rate * delta)
+	if corrupting:
+		corruption_timer -= delta
+		if corruption_timer <= 0.0:
+			end_corruption()
+			return
+
+		if corruption_polygon.size() >= 3:
+			for child in get_parent().get_children():
+				var npc: Npc = child as Npc
+				if npc and npc.team == 0 and Geometry2D.is_point_in_polygon(npc.position, corruption_polygon):
+					npc.take_drain(corruption_drain_rate * delta)
 	
 func move(delta: float) -> void:
 	var direction = Input.get_vector("left", "right", "up", "down")
@@ -61,8 +69,9 @@ func apply_movement(ammount: Vector2) -> void:
 	velocity += ammount
 	velocity = velocity.limit_length(player_speed)
 
-func connect_minions() -> void:
+func start_corruption() -> void:
 	corrupting = true
+	corruption_timer = corruption_duration
 	var parent: Node2D = get_parent()
 	if not parent:
 		return
@@ -82,6 +91,20 @@ func connect_minions() -> void:
 		line.add_point(next.position)
 		parent.add_child(line)
 		lines.append(line)
+
+func end_corruption() -> void:
+	corrupting = false
+	corruption_polygon = PackedVector2Array()
+
+	for line in lines:
+		if is_instance_valid(line):
+			line.queue_free()
+	lines.clear()
+
+	for m in minions:
+		if is_instance_valid(m):
+			m.queue_free()
+	minions.clear()
 
 func spawn_minion() -> void:
 	var minion: Node2D = Node2D.new()
