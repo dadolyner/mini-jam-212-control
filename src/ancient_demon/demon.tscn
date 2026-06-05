@@ -181,11 +181,15 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gk35p"]
 
-[node name="Demon" type="CharacterBody2D" unique_id=1610083175 node_paths=PackedStringArray("animated_sprite", "player_sprite")]
+[node name="Demon" type="CharacterBody2D" unique_id=1610083175 node_paths=PackedStringArray("animated_sprite", "player_sprite", "corruption_area")]
 scale = Vector2(2, 2)
 script = ExtResource("1_egqfa")
+player_speed = null
+player_acceleration = null
+player_friction = null
 animated_sprite = NodePath("AnimatedSprite2D")
 player_sprite = NodePath("Sprite2D")
+corruption_area = NodePath("CorruptionArea")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2045529439]
 visible = false
@@ -203,3 +207,8 @@ shape = SubResource("CapsuleShape2D_gk35p")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1906926969]
 zoom = Vector2(2, 2)
 position_smoothing_enabled = true
+
+[node name="CorruptionArea" type="Area2D" parent="." unique_id=1569251590]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CorruptionArea" unique_id=1522138239]
+shape = SubResource("CapsuleShape2D_gk35p")

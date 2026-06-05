@@ -46,6 +46,9 @@ texture = ExtResource("2_gh0ne")
 
 [node name="Demon" parent="." unique_id=1610083175 instance=ExtResource("4_3cfgd")]
 position = Vector2(913, 775)
+player_speed = 400.0
+player_acceleration = 4000.0
+player_friction = 5000.0
 
 [node name="GoodGuySpawns" type="Node2D" parent="." unique_id=346122330]
 
