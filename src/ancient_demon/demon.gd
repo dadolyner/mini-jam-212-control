@@ -17,7 +17,7 @@ var minions: Array[Node2D] = []
 var corrupting: bool = false
 var lines: Array[Line2D] = []
 var corruption_polygon: PackedVector2Array
-var corruption_drain_rate: float = 10.0
+var corruption_drain_rate: float = 11.0
 var corruption_timer: float = 0.0
 @export var corruption_duration: float = 5.0
 

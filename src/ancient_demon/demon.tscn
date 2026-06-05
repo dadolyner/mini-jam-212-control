@@ -184,9 +184,6 @@ animations = [{
 [node name="Demon" type="CharacterBody2D" unique_id=1610083175 node_paths=PackedStringArray("animated_sprite", "player_sprite", "corruption_area")]
 scale = Vector2(2, 2)
 script = ExtResource("1_egqfa")
-player_speed = null
-player_acceleration = null
-player_friction = null
 animated_sprite = NodePath("AnimatedSprite2D")
 player_sprite = NodePath("Sprite2D")
 corruption_area = NodePath("CorruptionArea")

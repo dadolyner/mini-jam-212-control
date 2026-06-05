@@ -26,6 +26,7 @@ var _converting := false
 func _ready() -> void:
 	motion_mode = MOTION_MODE_FLOATING
 	add_to_group("npc")
+	GameManager.register_npc(team)
 
 	health = max_health
 	_health_bar.max_value = max_health
@@ -37,6 +38,10 @@ func _ready() -> void:
 
 	_pick_next_state()
 	queue_redraw()
+
+
+func _exit_tree() -> void:
+	GameManager.unregister_npc(team)
 
 
 func _draw() -> void:
@@ -106,6 +111,14 @@ func take_drain(amount: float, _from: Npc = null) -> void:
 	_health_bar.visible = health < max_health
 	if health <= 0.0:
 		_convert()
+
+
+func heal(amount: float) -> void:
+	if _converting:
+		return
+	health = min(health + amount, max_health)
+	_health_bar.value = health
+	_health_bar.visible = health < max_health
 
 
 func _convert() -> void:

@@ -41,7 +41,7 @@ func _ready() -> void:
 	# Floor tiles — 85 % main stone, 15 % cracked variant
 	var x := _MAP_L + _FLOOR_STEP * 0.5
 	while x < _MAP_R + _FLOOR_STEP:
-		var y := _MAP_T + _FLOOR_STEP * 0.5
+		var y  := _MAP_T + _FLOOR_STEP * 0.5
 		while y < _MAP_B + _FLOOR_STEP:
 			var src := _TILE_FLOOR if rng.randf() > 0.15 else _TILE_SMALL
 			var w   := src.size.x * _TILE_SCALE
