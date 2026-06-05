@@ -11,8 +11,14 @@ config_version=5
 [application]
 
 config/name="mini-jam-212-control"
+run/main_scene="uid://daxg1lxosgdyo"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
 
 [physics]
 

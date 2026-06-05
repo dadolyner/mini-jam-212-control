@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://co4x3p8iqj77f"
+path="res://.godot/imported/teleport.mp3-39725255431f553504a1f08a7be8896d.mp3str"
+
+[deps]
+
+source_file="res://assets/Pixel Adventure/Sounds/teleport.mp3"
+dest_files=["res://.godot/imported/teleport.mp3-39725255431f553504a1f08a7be8896d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
