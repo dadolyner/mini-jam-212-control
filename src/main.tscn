@@ -14,7 +14,7 @@ size = Vector2(53, 1426)
 [node name="Main" type="Node2D" unique_id=464101160]
 script = ExtResource("1_5q4o7")
 
-[node name="zgori" type="Area2D" parent="." unique_id=844532523]
+[node name="zgori" type="StaticBody2D" parent="." unique_id=806904111]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="zgori" unique_id=1494828907]
 position = Vector2(225.5, -131)
@@ -25,7 +25,7 @@ position = Vector2(1, 0)
 scale = Vector2(35.453125, 1)
 texture = ExtResource("1_eewff")
 
-[node name="spodi" type="Area2D" parent="." unique_id=1006567980]
+[node name="spodi" type="StaticBody2D" parent="." unique_id=1658151914]
 position = Vector2(12, 1373)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="spodi" unique_id=1983184309]
@@ -37,7 +37,7 @@ position = Vector2(1, 0)
 scale = Vector2(35.453125, 1)
 texture = ExtResource("1_eewff")
 
-[node name="levo" type="Area2D" parent="." unique_id=2018152862]
+[node name="levo" type="StaticBody2D" parent="." unique_id=58238096]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="levo" unique_id=1330616788]
 position = Vector2(-877.5, 553)
@@ -48,7 +48,7 @@ position = Vector2(-2.2499983, 2.4999542)
 scale = Vector2(0.92968756, 22.390623)
 texture = ExtResource("1_eewff")
 
-[node name="desno" type="Area2D" parent="." unique_id=1031384818]
+[node name="desno" type="StaticBody2D" parent="." unique_id=2026334582]
 position = Vector2(2221, -3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="desno" unique_id=545678456]
@@ -61,11 +61,35 @@ scale = Vector2(0.92968756, 22.390623)
 texture = ExtResource("1_eewff")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1005727506]
-position = Vector2(-415.25, 125.36088)
+position = Vector2(-541, 120)
 scale = Vector2(0.36572266, 0.3591033)
 texture = ExtResource("2_gh0ne")
 
-[node name="Marker2D" type="Marker2D" parent="." unique_id=1330518771]
-position = Vector2(395, 206)
-
 [node name="Demon" parent="." unique_id=1610083175 instance=ExtResource("4_3cfgd")]
+position = Vector2(913, 775)
+
+[node name="GoodGuySpawns" type="Node2D" parent="." unique_id=346122330]
+
+[node name="Marker2D" type="Marker2D" parent="GoodGuySpawns" unique_id=1330518771]
+position = Vector2(-543, 546)
+
+[node name="Marker2D5" type="Marker2D" parent="GoodGuySpawns" unique_id=552812488]
+position = Vector2(532, 651)
+
+[node name="Marker2D3" type="Marker2D" parent="GoodGuySpawns" unique_id=1835261652]
+position = Vector2(76, 152)
+
+[node name="Marker2D2" type="Marker2D" parent="GoodGuySpawns" unique_id=1417670820]
+position = Vector2(-467, 1015)
+
+[node name="Marker2D4" type="Marker2D" parent="GoodGuySpawns" unique_id=999390344]
+position = Vector2(-45, 619)
+
+[node name="BadGuySpawns" type="Node2D" parent="." unique_id=1782042170]
+position = Vector2(1133, 1057)
+
+[node name="Marker2D" type="Marker2D" parent="BadGuySpawns" unique_id=2130602991]
+position = Vector2(-14, -246)
+
+[node name="Marker2D2" type="Marker2D" parent="BadGuySpawns" unique_id=377620248]
+position = Vector2(-300, -2)

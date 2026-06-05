@@ -7,8 +7,19 @@
 radius = 12.0
 height = 28.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_detect"]
+radius = 120.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.1, 0.1, 0.1, 0.7)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill"]
+bg_color = Color(0.2, 0.8, 0.25, 1)
+
 [node name="GoodNpc" type="CharacterBody2D" unique_id=971675066]
 script = ExtResource("1_5qoh2")
+converts_to_path = "res://src/badNPC/badNPC.tscn"
+convert_sound = "convert_bad"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2073120245]
 shape = SubResource("CapsuleShape2D_5qoh2")
@@ -17,3 +28,18 @@ shape = SubResource("CapsuleShape2D_5qoh2")
 position = Vector2(0.2499981, -3.7500057)
 scale = Vector2(0.32421878, 0.32421878)
 texture = ExtResource("2_5qoh2")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1014762771]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1568064791]
+shape = SubResource("CircleShape2D_detect")
+
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=1775270156]
+offset_left = -20.0
+offset_top = -30.0
+offset_right = 20.0
+offset_bottom = -24.0
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fill")
+value = 100.0
+show_percentage = false
