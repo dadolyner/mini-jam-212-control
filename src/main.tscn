@@ -73,3 +73,14 @@ texture = ExtResource("2_gh0ne")
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=1330518771]
 position = Vector2(395, 206)
+[ext_resource type="PackedScene" uid="uid://dcacbpk0wusy4" path="res://src/ancient_demon/demon.tscn" id="1_eewff"]
+[ext_resource type="Texture2D" uid="uid://b1ry8447yigkt" path="res://resources/land.png" id="1_gh0ne"]
+
+[node name="Main" type="Node2D" unique_id=464101160]
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=885781763]
+offset_right = 3195.0
+offset_bottom = 1944.0
+texture = ExtResource("1_gh0ne")
+
+[node name="Demon" parent="." unique_id=1610083175 instance=ExtResource("1_eewff")]
