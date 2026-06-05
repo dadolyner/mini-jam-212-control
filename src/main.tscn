@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://daxg1lxosgdyo"]
 
 [ext_resource type="Script" uid="uid://rd54mb8xwesb" path="res://src/main.gd" id="1_5q4o7"]
-[ext_resource type="Texture2D" uid="uid://cn0ncdx48w2d7" path="res://assets/Pixel Adventure/Background/Pink.png" id="1_eewff"]
 [ext_resource type="Texture2D" uid="uid://raegpp2k2bw6" path="res://assets/sprites/castle.png" id="2_gh0ne"]
 [ext_resource type="PackedScene" uid="uid://dcacbpk0wusy4" path="res://src/ancient_demon/demon.tscn" id="4_3cfgd"]
 
@@ -20,11 +19,6 @@ script = ExtResource("1_5q4o7")
 position = Vector2(225.5, -131)
 shape = SubResource("RectangleShape2D_gh0ne")
 
-[node name="Sprite2D" type="Sprite2D" parent="zgori/CollisionShape2D" unique_id=1605340976]
-position = Vector2(1, 0)
-scale = Vector2(35.453125, 1)
-texture = ExtResource("1_eewff")
-
 [node name="spodi" type="StaticBody2D" parent="." unique_id=1658151914]
 position = Vector2(12, 1373)
 
@@ -32,21 +26,11 @@ position = Vector2(12, 1373)
 position = Vector2(225.5, -131)
 shape = SubResource("RectangleShape2D_gh0ne")
 
-[node name="Sprite2D" type="Sprite2D" parent="spodi/CollisionShape2D" unique_id=1558428383]
-position = Vector2(1, 0)
-scale = Vector2(35.453125, 1)
-texture = ExtResource("1_eewff")
-
 [node name="levo" type="StaticBody2D" parent="." unique_id=58238096]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="levo" unique_id=1330616788]
 position = Vector2(-877.5, 553)
 shape = SubResource("RectangleShape2D_eewff")
-
-[node name="Sprite2D" type="Sprite2D" parent="levo/CollisionShape2D" unique_id=1732229398]
-position = Vector2(-2.2499983, 2.4999542)
-scale = Vector2(0.92968756, 22.390623)
-texture = ExtResource("1_eewff")
 
 [node name="desno" type="StaticBody2D" parent="." unique_id=2026334582]
 position = Vector2(2221, -3)
@@ -54,11 +38,6 @@ position = Vector2(2221, -3)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="desno" unique_id=545678456]
 position = Vector2(-877.5, 553)
 shape = SubResource("RectangleShape2D_eewff")
-
-[node name="Sprite2D" type="Sprite2D" parent="desno/CollisionShape2D" unique_id=776719702]
-position = Vector2(-2.2499983, 2.4999542)
-scale = Vector2(0.92968756, 22.390623)
-texture = ExtResource("1_eewff")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1005727506]
 position = Vector2(-541, 120)

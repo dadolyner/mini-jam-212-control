@@ -43,7 +43,7 @@ func _draw() -> void:
 	var shape := _detection_shape.shape as CircleShape2D
 	if shape == null:
 		return
-	var color := Color(0.3, 0.9, 0.4, 0.07) if team == Team.GOOD else Color(1.0, 0.3, 0.3, 0.07)
+	var color := Color(0.3, 0.9, 0.4, 0.42) if team == Team.GOOD else Color(1.0, 0.3, 0.3, 0.42)
 	draw_circle(Vector2.ZERO, shape.radius, color)
 
 
