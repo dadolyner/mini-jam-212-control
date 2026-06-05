@@ -13,6 +13,7 @@ enum Team { GOOD, BAD }
 @export var convert_sound: String = ""         
 
 @onready var _health_bar: ProgressBar = $HealthBar
+@onready var _detection_shape: CollisionShape2D = $DetectionArea/CollisionShape2D
 
 var health: float
 var _state := State.IDLE
@@ -35,6 +36,15 @@ func _ready() -> void:
 	$DetectionArea.body_exited.connect(_on_body_exited)
 
 	_pick_next_state()
+	queue_redraw()
+
+
+func _draw() -> void:
+	var shape := _detection_shape.shape as CircleShape2D
+	if shape == null:
+		return
+	var color := Color(0.3, 0.9, 0.4, 0.07) if team == Team.GOOD else Color(1.0, 0.3, 0.3, 0.07)
+	draw_circle(Vector2.ZERO, shape.radius, color)
 
 
 func _physics_process(delta: float) -> void:
@@ -85,10 +95,10 @@ func _apply_drain(delta: float) -> void:
 	var amount := drain_rate * delta
 	for t in _targets:
 		if is_instance_valid(t):
-			t.take_drain(amount)
+			t.take_drain(amount, self)
 
 
-func take_drain(amount: float) -> void:
+func take_drain(amount: float, _from: Npc = null) -> void:
 	if _converting:
 		return
 	health -= amount

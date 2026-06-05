@@ -18,6 +18,7 @@ bg_color = Color(0.2, 0.8, 0.25, 1)
 
 [node name="GoodNpc" type="CharacterBody2D" unique_id=971675066]
 script = ExtResource("1_5qoh2")
+drain_rate = 5.0
 converts_to_path = "res://src/badNPC/badNPC.tscn"
 convert_sound = "convert_bad"
 

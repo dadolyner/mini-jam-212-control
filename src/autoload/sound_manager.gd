@@ -1,8 +1,16 @@
 extends Node
 
-##  `SoundManager.play("name")`
+## `SoundManager.play("name")`
 
 const _POOL_SIZE := 8
+
+@export_range(0.0, 1.0) var master_volume: float = 1.0:
+	set(value):
+		master_volume = clampf(value, 0.0, 1.0)
+		AudioServer.set_bus_volume_db(
+			AudioServer.get_bus_index("Master"),
+			linear_to_db(master_volume)
+		)
 const _SOUND_DIR := "res://assets/Pixel Adventure/Sounds/"
 
 const _FILES := {
@@ -16,6 +24,8 @@ var _next := 0
 
 
 func _ready() -> void:
+	master_volume = 0.1
+
 	for key in _FILES:
 		var stream = load(_SOUND_DIR + _FILES[key])
 		if stream:
