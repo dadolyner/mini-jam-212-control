@@ -16,6 +16,7 @@ enum UnitType { BASIC, HEALER, KNIGHT }
 
 @onready var _health_bar: ProgressBar = $HealthBar
 @onready var _detection_shape: CollisionShape2D = $DetectionArea/CollisionShape2D
+@onready var _nav_agent: NavigationAgent2D = $NavigationAgent2D
 
 const RETREAT_FRAC := 0.3      # na 30% healtha gredo do castla se healat
 const RECOVER_FRAC := 0.7      # na 70% healtha se nehajo healat pr castlu
@@ -78,13 +79,12 @@ func _physics_process(delta: float) -> void:
 
 	var target: Npc = null
 	if unit_type == UnitType.HEALER:
-		#healerji followvajo
-		if not _follow_ally(delta) and not _move_to_destination():
+		if not _move_to_destination():
 			_wander(delta)
 	else:
 		target = _nearest_target()
 		if target:
-			velocity = (target.global_position - global_position).normalized() * SPEED
+			_navigate_toward(target.global_position)
 		elif _move_to_destination():
 			pass
 		else:
@@ -169,6 +169,9 @@ func _convert() -> void:
 	if scene == null:
 		return
 	_converting = true
+
+	if team == Team.GOOD:
+		GameManager.gain_mana(1)
 
 	if convert_sound != "":
 		SoundManager.play(convert_sound)
@@ -327,17 +330,27 @@ func _move_to_destination() -> bool:
 		if _retreating:
 			var refuge := _nearest_castle(team)
 			if refuge:
-				velocity = (refuge.global_position - global_position).normalized() * SPEED
+				_navigate_toward(refuge.global_position)
 				return true
 
 	if _objective != null and is_instance_valid(_objective):
 		var to_obj := _objective.global_position - global_position
 		if to_obj.length() <= OBJECTIVE_REACH:
 			_objective = null
-		else:
-			velocity = to_obj.normalized() * SPEED
-			return true
+			return false
+		_navigate_toward(_objective.global_position)
+		return true
 	return false
+
+
+func _navigate_toward(target: Vector2) -> void:
+	_nav_agent.target_position = target
+	var next_pos: Vector2 = _nav_agent.get_next_path_position()
+	var dir := next_pos - global_position
+	if dir.length_squared() > 1.0:
+		velocity = dir.normalized() * SPEED
+	else:
+		velocity = Vector2.ZERO
 
 
 func _nearest_castle(of_team: int) -> Node2D:

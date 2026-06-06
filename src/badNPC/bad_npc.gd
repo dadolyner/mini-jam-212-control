@@ -94,7 +94,7 @@ func _physics_process(delta: float) -> void:
 			_rally_target = null
 			super._physics_process(delta)
 		else:
-			velocity = (_rally_target.global_position - global_position).normalized() * SPEED
+			_navigate_toward(_rally_target.global_position)
 			move_and_slide()
 			$Sprite2D.flip_h = velocity.x < 0.0
 		_check_flee_reaction(delta)

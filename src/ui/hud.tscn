@@ -1,18 +1,14 @@
 [gd_scene format=3 uid="uid://dhudscene0001"]
 
 [ext_resource type="Script" uid="uid://chudscript001" path="res://src/ui/hud.gd" id="1_hud"]
+[ext_resource type="Script" path="res://src/ui/mana_circle.gd" id="2_mana_circle"]
+[ext_resource type="Script" path="res://src/ui/minimap.gd" id="3_minimap"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
 bg_color = Color(0.78, 0.18, 0.18, 0.92)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill"]
 bg_color = Color(0.2, 0.75, 0.28, 0.95)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mana_bg"]
-bg_color = Color(0.05, 0.05, 0.22, 0.92)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mana_fill"]
-bg_color = Color(0.28, 0.18, 0.82, 0.95)
 
 [node name="Hud" type="CanvasLayer" unique_id=843215730]
 script = ExtResource("1_hud")
@@ -57,29 +53,39 @@ text = "BAD 50%"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="ManaBar" type="ProgressBar" parent="."]
-anchor_left = 0.75
+[node name="BottomRight" type="HBoxContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 0.0
-offset_top = 108.0
-offset_bottom = 158.0
-grow_horizontal = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_mana_bg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_mana_fill")
-max_value = 20.0
-value = 20.0
-show_percentage = false
+anchor_bottom = 1.0
+offset_left = -744.0
+offset_top = -416.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+alignment = 2
 
-[node name="ManaBarLabel" type="Label" parent="ManaBar"]
+[node name="ManaCircle" type="Control" parent="BottomRight"]
+custom_minimum_size = Vector2(200, 200)
+script = ExtResource("2_mana_circle")
+
+[node name="Label" type="Label" parent="BottomRight/ManaCircle"]
 layout_mode = 0
+anchor_left = 0.0
+anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 26
-text = "Mana 20/20"
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 28
+text = "20/20"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Minimap" type="Control" parent="BottomRight"]
+custom_minimum_size = Vector2(520, 400)
+script = ExtResource("3_minimap")

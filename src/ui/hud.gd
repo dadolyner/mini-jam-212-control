@@ -3,8 +3,7 @@ extends CanvasLayer
 @onready var _bar: ProgressBar = $BalanceBar
 @onready var _good_label: Label = $BalanceBar/GoodLabel
 @onready var _bad_label: Label = $BalanceBar/BadLabel
-@onready var _mana_bar: ProgressBar = $ManaBar
-@onready var _mana_bar_label: Label = $ManaBar/ManaBarLabel
+@onready var _mana_circle: Control = $BottomRight/ManaCircle
 
 
 func _ready() -> void:
@@ -22,6 +21,4 @@ func _on_balance_changed(good_ratio: float, bad_ratio: float) -> void:
 
 
 func _on_mana_changed(current: int, maximum: int) -> void:
-	_mana_bar.max_value = maximum
-	_mana_bar.value = current
-	_mana_bar_label.text = "Mana %d/%d" % [current, maximum]
+	_mana_circle.call("set_mana", current, maximum)

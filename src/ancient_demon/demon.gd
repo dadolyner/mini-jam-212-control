@@ -1,3 +1,4 @@
+class_name Demon
 extends CharacterBody2D
 
 enum {IDLE, RUN}
@@ -15,7 +16,6 @@ var input: Vector2
 
 var minions: Array[Node2D] = []
 var corrupting: bool = false
-var lines: Array[Line2D] = []
 var corruption_polygon: PackedVector2Array
 var corruption_drain_rate: float = 11.0
 var corruption_timer: float = 0.0
@@ -27,6 +27,7 @@ const UPGRADE_RADIUS := 250.0
 var _shake_amount: float = 0.0
 
 func _ready() -> void:
+	add_to_group("player")
 	Effects.shake_requested.connect(_on_shake_requested)
 
 func _on_shake_requested(amount: float) -> void:
@@ -61,6 +62,10 @@ func _nearest_bad_unit(skip_type: Npc.UnitType) -> Npc:
 			best_dist = d
 			best = npc
 	return best
+
+#za kvadrat okol, da vidš koga boš upgradal
+func get_upgrade_target(skip_type: Npc.UnitType) -> Npc:
+	return _nearest_bad_unit(skip_type)
 
 func _physics_process(delta: float) -> void:
 	move(delta)
@@ -119,9 +124,6 @@ func apply_movement(ammount: Vector2) -> void:
 func start_corruption() -> void:
 	corrupting = true
 	corruption_timer = corruption_duration
-	var parent: Node2D = get_parent()
-	if not parent:
-		return
 
 	corruption_polygon = PackedVector2Array()
 	for i in range(minions.size()):
@@ -130,23 +132,9 @@ func start_corruption() -> void:
 		minion.queue_redraw()
 		corruption_polygon.append(minion.position)
 
-		var next: Node2D = minions[(i + 1) % minions.size()]
-		var line: Node2D = Line2D.new()
-		line.default_color = Color.RED
-		line.width = 2.0
-		line.add_point(minion.position)
-		line.add_point(next.position)
-		parent.add_child(line)
-		lines.append(line)
-
 func end_corruption() -> void:
 	corrupting = false
 	corruption_polygon = PackedVector2Array()
-
-	for line in lines:
-		if is_instance_valid(line):
-			line.queue_free()
-	lines.clear()
 
 	for m in minions:
 		if is_instance_valid(m):

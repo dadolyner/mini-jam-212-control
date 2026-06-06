@@ -28,6 +28,7 @@ var health: float
 var _npcs: Array[Npc] = []    #za trackanje kolk je NPCjev okol
 var _spawn_timer := 0.0
 var _order_timer := 0.0
+var _spawn_label: Label
 
 
 func _ready() -> void:
@@ -48,6 +49,7 @@ func _ready() -> void:
 	_spawn_timer = spawn_interval
 	_order_timer = order_interval
 	_refresh_visuals()
+	_create_spawn_label()
 	queue_redraw()
 
 
@@ -82,6 +84,7 @@ func _physics_process(delta: float) -> void:
 			_flip_to(Team.GOOD)
 
 	_update_health_display()
+	_spawn_label.text = "%.1f" % maxf(_spawn_timer, 0.0)
 
 	_run_turret(delta)
 	_run_aura(delta)
@@ -105,6 +108,19 @@ func _flip_to(new_team: Team) -> void:
 		Effects.burst(global_position, Color(0.3, 0.9, 0.4), 48)
 		Effects.shake(8.0)
 		SoundManager.play("castle_purify")
+
+
+#za grad spawn timer
+func _create_spawn_label() -> void:
+	_spawn_label = Label.new()
+	_spawn_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_spawn_label.position = Vector2(-60.0, -220.0)
+	_spawn_label.size = Vector2(120.0, 28.0)
+	_spawn_label.add_theme_font_size_override("font_size", 18)
+	_spawn_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.4, 1.0))
+	_spawn_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 1.0))
+	_spawn_label.add_theme_constant_override("outline_size", 4)
+	add_child(_spawn_label)
 
 
 func _update_health_display() -> void:

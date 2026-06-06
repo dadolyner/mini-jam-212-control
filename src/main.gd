@@ -4,11 +4,15 @@ const GoodNPC = preload("res://src/goodNPC/goodNPC.tscn")
 const BadNPC  = preload("res://src/badNPC/badNPC.tscn")
 const SPAWN_RADIUS = 250.0
 
+@onready var _nav_region: NavigationRegion2D = $NavRegion
+
 
 func _ready() -> void:
 	var bg := preload("res://src/background.gd").new()
 	bg.z_index = -5
 	add_child(bg)
+
+	_nav_region.bake_navigation_polygon(false)
 
 	for marker in $GoodGuySpawns.get_children():
 		_spawn_npcs(GoodNPC, marker.global_position, 10)

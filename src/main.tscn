@@ -1,9 +1,15 @@
 [gd_scene format=3 uid="uid://daxg1lxosgdyo"]
 
 [ext_resource type="Script" uid="uid://rd54mb8xwesb" path="res://src/main.gd" id="1_5q4o7"]
+[ext_resource type="Script" path="res://src/ui/upgrade_preview.gd" id="10_upgprev"]
 [ext_resource type="PackedScene" uid="uid://dr668wvrpenb5" path="res://src/castle/castle.tscn" id="2_castle"]
 [ext_resource type="PackedScene" uid="uid://dcacbpk0wusy4" path="res://src/ancient_demon/demon.tscn" id="4_3cfgd"]
 [ext_resource type="PackedScene" uid="uid://dhudscene0001" path="res://src/ui/hud.tscn" id="5_hud"]
+
+[sub_resource type="NavigationPolygon" id="NavPoly_001"]
+agent_radius = 14.0
+parsed_geometry_type = 1
+outlines = [PackedVector2Array(-2950, -2450, 3950, -2450, 3950, 3450, -2950, 3450)]
 
 [sub_resource type="RectangleShape2D" id="ShapeTopBot"]
 size = Vector2(7200, 80)
@@ -165,5 +171,12 @@ position = Vector2(-1651, 2864)
 
 [node name="Marker2D2" type="Marker2D" parent="BadGuySpawns" unique_id=377620248]
 position = Vector2(-2267, 2404)
+
+[node name="NavRegion" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavPoly_001")
+
+[node name="UpgradePreview" type="Node2D" parent="." unique_id=333100001]
+z_index = 50
+script = ExtResource("10_upgprev")
 
 [node name="Hud" parent="." unique_id=916277287 instance=ExtResource("5_hud")]

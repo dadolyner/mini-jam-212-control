@@ -31,6 +31,11 @@ func try_spend_mana(amount: int) -> bool:
 	return true
 
 
+func gain_mana(amount: int) -> void:
+	mana = mini(mana + amount, MAX_MANA)
+	_emit_mana()
+
+
 func _emit_mana() -> void:
 	mana_changed.emit(mana, MAX_MANA)
 

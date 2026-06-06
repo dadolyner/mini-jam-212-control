@@ -35,6 +35,10 @@ texture = ExtResource("2_5qoh2")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1568064791]
 shape = SubResource("CircleShape2D_detect")
 
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 16.0
+target_desired_distance = 32.0
+
 [node name="HealthBar" type="ProgressBar" parent="." unique_id=1775270156]
 offset_left = -20.0
 offset_top = -30.0
