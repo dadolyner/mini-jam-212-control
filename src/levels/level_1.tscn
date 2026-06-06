@@ -1,6 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://blevel1scene01"]
+[gd_scene format=3 uid="uid://cves4foj6from"]
 
-[ext_resource type="Script" path="res://src/levels/portal.gd" id="1_portal"]
+[ext_resource type="Script" uid="uid://b62mqo8q35rq0" path="res://src/levels/level_1.gd" id="1_level"]
 [ext_resource type="PackedScene" uid="uid://dcacbpk0wusy4" path="res://src/ancient_demon/demon.tscn" id="2_demon"]
 [ext_resource type="PackedScene" uid="uid://df6plip2y0mqw" path="res://src/goodNPC/goodNPC.tscn" id="3_good"]
 [ext_resource type="PackedScene" uid="uid://bnwdtmq2vpmvo" path="res://src/badNPC/badNPC.tscn" id="4_bad"]
@@ -8,7 +8,7 @@
 
 [sub_resource type="NavigationPolygon" id="NavPoly_lvl1"]
 vertices = PackedVector2Array(-680, -430, 680, -430, 680, 430, -680, 430)
-polygons = [PackedInt32Array(0, 1, 2, 3)]
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
 agent_radius = 14.0
 
 [sub_resource type="RectangleShape2D" id="Shape_horiz"]
@@ -17,97 +17,129 @@ size = Vector2(1440, 40)
 [sub_resource type="RectangleShape2D" id="Shape_vert"]
 size = Vector2(40, 900)
 
-[sub_resource type="CircleShape2D" id="Shape_portal"]
-radius = 70.0
+[node name="Level" type="Node2D" unique_id=1574938700]
+script = ExtResource("1_level")
 
-[node name="Level" type="Node2D"]
+[node name="NavRegion" type="NavigationRegion2D" parent="." unique_id=156410916]
+navigation_polygon = SubResource("NavPoly_lvl1")
 
-[node name="Background" type="CanvasLayer" parent="."]
-layer = -10
+[node name="Walls" type="StaticBody2D" parent="." unique_id=387452435]
 
-[node name="ColorRect" type="ColorRect" parent="Background"]
+[node name="Top" type="CollisionShape2D" parent="Walls" unique_id=1468271414]
+position = Vector2(0, -450)
+shape = SubResource("Shape_horiz")
+
+[node name="Bottom" type="CollisionShape2D" parent="Walls" unique_id=1941111614]
+position = Vector2(0, 450)
+shape = SubResource("Shape_horiz")
+
+[node name="Left" type="CollisionShape2D" parent="Walls" unique_id=2021576039]
+position = Vector2(-700, 0)
+shape = SubResource("Shape_vert")
+
+[node name="Right" type="CollisionShape2D" parent="Walls" unique_id=1776340246]
+position = Vector2(700, 0)
+shape = SubResource("Shape_vert")
+
+[node name="CorruptionPolygon" type="Polygon2D" parent="." unique_id=812300001]
+z_index = 5
+color = Color(0.9, 0.15, 0.15, 0.35)
+
+[node name="Demon" parent="." unique_id=692886195 instance=ExtResource("2_demon")]
+position = Vector2(-400, 0)
+
+[node name="BadNpc" parent="." unique_id=318957903 instance=ExtResource("4_bad")]
+position = Vector2(-250, 150)
+
+[node name="GoodNpc" parent="." unique_id=92954598 instance=ExtResource("3_good")]
+position = Vector2(350, 50)
+
+[node name="DemoGood" parent="." unique_id=812300002 instance=ExtResource("3_good")]
+position = Vector2(-400, -200)
+
+[node name="DemoBad" parent="." unique_id=812300003 instance=ExtResource("4_bad")]
+position = Vector2(-400, -100)
+max_health = 15.0
+
+[node name="Hud" parent="." unique_id=543674928 instance=ExtResource("5_hud")]
+
+[node name="Tutorial" type="CanvasLayer" parent="." unique_id=687470018]
+
+[node name="TaskTitle" type="Label" parent="Tutorial" unique_id=435233034]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -960.0
+offset_top = 120.0
+offset_right = -40.0
+offset_bottom = 210.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 72
+text = "Step 1/4"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="TaskHint" type="Label" parent="Tutorial" unique_id=531137789]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -960.0
+offset_top = 218.0
+offset_right = -40.0
+offset_bottom = 272.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 0.88, 0.4, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 40
+text = "Hint"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="CorruptionTimer" type="Label" parent="Tutorial" unique_id=812300004]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -600.0
+offset_top = 282.0
+offset_right = -40.0
+offset_bottom = 336.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 38
+text = "Corruption: 5.0s"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="IntroLabel" type="Label" parent="Tutorial" unique_id=812300005]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.11, 0.1, 0.13, 1)
-
-[node name="NavRegion" type="NavigationRegion2D" parent="."]
-navigation_polygon = SubResource("NavPoly_lvl1")
-
-[node name="Walls" type="StaticBody2D" parent="."]
-
-[node name="Top" type="CollisionShape2D" parent="Walls"]
-position = Vector2(0, -450)
-shape = SubResource("Shape_horiz")
-
-[node name="Bottom" type="CollisionShape2D" parent="Walls"]
-position = Vector2(0, 450)
-shape = SubResource("Shape_horiz")
-
-[node name="Left" type="CollisionShape2D" parent="Walls"]
-position = Vector2(-700, 0)
-shape = SubResource("Shape_vert")
-
-[node name="Right" type="CollisionShape2D" parent="Walls"]
-position = Vector2(700, 0)
-shape = SubResource("Shape_vert")
-
-[node name="Demon" parent="." instance=ExtResource("2_demon")]
-position = Vector2(-400, 0)
-
-[node name="BadNpc" parent="." instance=ExtResource("4_bad")]
-position = Vector2(-250, 150)
-
-[node name="GoodNpc" parent="." instance=ExtResource("3_good")]
-position = Vector2(300, 0)
-
-[node name="Portal" type="Area2D" parent="."]
-position = Vector2(600, 0)
-script = ExtResource("1_portal")
-next_scene = "res://src/main.tscn"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Portal"]
-shape = SubResource("Shape_portal")
-
-[node name="Marker" type="Polygon2D" parent="Portal"]
-color = Color(0.6, 0.35, 0.85, 0.55)
-polygon = PackedVector2Array(-45, -110, 45, -110, 45, 110, -45, 110)
-
-[node name="Label" type="Label" parent="Portal"]
-offset_left = -90.0
-offset_top = -160.0
-offset_right = 90.0
-offset_bottom = -130.0
-theme_override_colors/font_color = Color(0.9, 0.8, 1, 1)
+theme_override_colors/font_color = Color(1, 0.95, 0.85, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 22
-text = "→ BATTLE"
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 80
+text = "Watch: a villager is converting a demon..."
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Hud" parent="." instance=ExtResource("5_hud")]
-
-[node name="Controls" type="CanvasLayer" parent="."]
-
-[node name="Panel" type="PanelContainer" parent="Controls"]
-offset_left = 24.0
-offset_top = 120.0
-offset_right = 560.0
-offset_bottom = 360.0
-
-[node name="Label" type="Label" parent="Controls/Panel"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+[node name="CompletedLabel" type="Label" parent="Tutorial" unique_id=717036388]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.7, 1, 0.75, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 24
-text = "WASD  -  Move
-SPACE -  Summon minion
-E     -  Corrupt (3+ minions)
-1 / 2 -  Upgrade Healer / Knight
-
-Spread 3 minions around the
-villager and press E to convert it.
-Walk into the portal when ready."
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 80
+text = "TUTORIAL COMPLETED!"
+horizontal_alignment = 1
+vertical_alignment = 1
