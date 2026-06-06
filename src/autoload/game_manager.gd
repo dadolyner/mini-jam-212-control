@@ -1,9 +1,14 @@
 extends Node
 
 signal balance_changed(good_ratio: float, bad_ratio: float)
+signal mana_changed(current: int, maximum: int)
 
 const TEAM_GOOD := 0
 const TEAM_BAD := 1
+
+const MAX_MANA := 20
+const COST_HEALER := 8
+const COST_KNIGHT := 12
 
 const CASTLE_WEIGHT := 5   # 1 grad = 5 minionov
 
@@ -11,6 +16,23 @@ var good_npcs := 0
 var bad_npcs := 0
 var good_castles := 0
 var bad_castles := 0
+
+var mana := MAX_MANA
+
+
+func _ready() -> void:
+	_emit_mana()
+
+func try_spend_mana(amount: int) -> bool:
+	if mana < amount:
+		return false
+	mana -= amount
+	_emit_mana()
+	return true
+
+
+func _emit_mana() -> void:
+	mana_changed.emit(mana, MAX_MANA)
 
 
 func register_npc(team: int) -> void:

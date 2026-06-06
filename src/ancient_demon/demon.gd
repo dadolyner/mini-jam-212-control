@@ -21,6 +21,8 @@ var corruption_drain_rate: float = 11.0
 var corruption_timer: float = 0.0
 @export var corruption_duration: float = 5.0
 
+const UPGRADE_RADIUS := 250.0 
+
 @onready var _camera: Camera2D = $Camera2D
 var _shake_amount: float = 0.0
 
@@ -38,6 +40,28 @@ func _update_shake(delta: float) -> void:
 	_camera.offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * _shake_amount
 	_shake_amount = max(_shake_amount - 40.0 * delta, 0.0)
 
+func _try_upgrade(type: Npc.UnitType, cost: int) -> void:
+	var unit := _nearest_bad_unit(type)
+	if unit == null:
+		return
+	if not GameManager.try_spend_mana(cost):
+		return
+	unit.upgrade_to(type)
+	SoundManager.play("power_up")
+
+func _nearest_bad_unit(skip_type: Npc.UnitType) -> Npc:
+	var best: Npc = null
+	var best_dist := UPGRADE_RADIUS * UPGRADE_RADIUS
+	for n in get_tree().get_nodes_in_group("npc"):
+		var npc := n as Npc
+		if npc == null or npc.team != Npc.Team.BAD or npc.unit_type == skip_type:
+			continue
+		var d := global_position.distance_squared_to(npc.global_position)
+		if d < best_dist:
+			best_dist = d
+			best = npc
+	return best
+
 func _physics_process(delta: float) -> void:
 	move(delta)
 	_update_shake(delta)
@@ -48,6 +72,11 @@ func _physics_process(delta: float) -> void:
 
 		if Input.is_action_just_pressed("corrupt") and minions.size() >= 3:
 			start_corruption()
+
+		if Input.is_action_just_pressed("upgrade_healer"):
+			_try_upgrade(Npc.UnitType.HEALER, GameManager.COST_HEALER)
+		if Input.is_action_just_pressed("upgrade_knight"):
+			_try_upgrade(Npc.UnitType.KNIGHT, GameManager.COST_KNIGHT)
 
 	if corrupting:
 		corruption_timer -= delta

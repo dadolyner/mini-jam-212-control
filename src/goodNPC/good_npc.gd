@@ -5,8 +5,10 @@ const SPEED = 60.0
 
 enum State { WANDERING, IDLE }
 enum Team { GOOD, BAD }
+enum UnitType { BASIC, HEALER, KNIGHT }
 
 @export var team: Team = Team.GOOD
+@export var unit_type: UnitType = UnitType.BASIC
 @export var max_health: float = 60.0
 @export var drain_rate: float = 10.0         
 @export_file("*.tscn") var converts_to_path: String  
@@ -15,15 +17,21 @@ enum Team { GOOD, BAD }
 @onready var _health_bar: ProgressBar = $HealthBar
 @onready var _detection_shape: CollisionShape2D = $DetectionArea/CollisionShape2D
 
-const RETREAT_FRAC := 0.1      # na 10% healtha gredo do castla se healat
+const RETREAT_FRAC := 0.3      # na 30% healtha gredo do castla se healat
 const RECOVER_FRAC := 0.7      # na 70% healtha se nehajo healat pr castlu
 const OBJECTIVE_REACH := 450.0 # da ne gredo direkt do castla, se prej ustavijo
+
+const KNIGHT_HEALTH := 160.0   
+const KNIGHT_DRAIN := 20.0     
+const HEALER_HEAL := 14.0      
+const FOLLOW_KEEP_DIST := 80.0
 
 var health: float
 var _state := State.IDLE
 var _state_timer := 0.0
 var _move_dir := Vector2.ZERO
 var _targets: Array[Npc] = []
+var _allies: Array[Npc] = []   # za healerja, kdo je in range
 var _converting := false
 var _objective: Node2D = null  # kam gredo uniti k jim je blo ukazano nekaj
 var _retreating := false
@@ -34,6 +42,9 @@ func _ready() -> void:
 	motion_mode = MOTION_MODE_FLOATING
 	add_to_group("npc")
 	GameManager.register_npc(team)
+
+	_apply_unit_type()
+	_apply_unit_color()
 
 	health = max_health
 	_health_bar.max_value = max_health
@@ -63,21 +74,31 @@ func _draw() -> void:
 
 func _physics_process(delta: float) -> void:
 	_prune_targets()
-	var target := _nearest_target()
+	_prune_allies()
 
-	if target:
-		velocity = (target.global_position - global_position).normalized() * SPEED
-	elif _move_to_destination():
-		pass
+	var target: Npc = null
+	if unit_type == UnitType.HEALER:
+		#healerji followvajo
+		if not _follow_ally(delta) and not _move_to_destination():
+			_wander(delta)
 	else:
-		_wander(delta)
+		target = _nearest_target()
+		if target:
+			velocity = (target.global_position - global_position).normalized() * SPEED
+		elif _move_to_destination():
+			pass
+		else:
+			_wander(delta)
 
 	move_and_slide()
 
 	if target == null and _state == State.WANDERING and get_slide_collision_count() > 0:
 		_pick_next_state()
 
-	_apply_drain(delta)
+	if unit_type == UnitType.HEALER:
+		_apply_heal(delta)
+	else:
+		_apply_drain(delta)
 	_update_march_label()
 
 	$Sprite2D.flip_h = velocity.x < 0.0
@@ -115,6 +136,13 @@ func _apply_drain(delta: float) -> void:
 			t.take_drain(amount, self)
 
 
+func _apply_heal(delta: float) -> void:
+	var amount := HEALER_HEAL * delta
+	for a in _allies:
+		if is_instance_valid(a):
+			a.heal(amount)
+
+
 func take_drain(amount: float, _from: Npc = null) -> void:
 	if _converting:
 		return
@@ -148,7 +176,8 @@ func _convert() -> void:
 	var pop := Color(1.0, 0.3, 0.3) if team == Team.GOOD else Color(0.3, 0.9, 0.4)
 	Effects.burst(global_position, pop, 12)
 
-	var replacement := scene.instantiate()
+	var replacement := scene.instantiate() as Npc
+	replacement.unit_type = unit_type 
 	replacement.position = global_position
 	get_parent().call_deferred("add_child", replacement)
 	queue_free()
@@ -157,20 +186,32 @@ func _convert() -> void:
 
 func _on_body_entered(body: Node) -> void:
 	var other := body as Npc
-	if other and other.team != team and not _targets.has(other):
-		_targets.append(other)
+	if other == null:
+		return
+	if other.team != team:
+		if not _targets.has(other):
+			_targets.append(other)
+	elif not _allies.has(other):
+		_allies.append(other)
 
 
 func _on_body_exited(body: Node) -> void:
 	var other := body as Npc
 	if other:
 		_targets.erase(other)
+		_allies.erase(other)
 
 
 func _prune_targets() -> void:
 	for i in range(_targets.size() - 1, -1, -1):
 		if not is_instance_valid(_targets[i]):
 			_targets.remove_at(i)
+
+
+func _prune_allies() -> void:
+	for i in range(_allies.size() - 1, -1, -1):
+		if not is_instance_valid(_allies[i]):
+			_allies.remove_at(i)
 
 
 func _nearest_target() -> Npc:
@@ -184,8 +225,77 @@ func _nearest_target() -> Npc:
 	return best
 
 
+func _nearest_ally() -> Npc:
+	var best: Npc = null
+	var best_dist := INF
+	for a in _allies:
+		if not is_instance_valid(a):
+			continue
+		var d := global_position.distance_squared_to(a.global_position)
+		if d < best_dist:
+			best_dist = d
+			best = a
+	if best:
+		return best
+	
+
+	for n in get_tree().get_nodes_in_group("npc"):
+		var ally := n as Npc
+		if ally == null or ally == self or ally.team != team:
+			continue
+		var ad := global_position.distance_squared_to(ally.global_position)
+		if ad < best_dist:
+			best_dist = ad
+			best = ally
+	return best
+
+
+func _follow_ally(delta: float) -> bool:
+	var ally := _nearest_ally()
+	if ally == null:
+		return false
+	var to_ally := ally.global_position - global_position
+	if to_ally.length() > FOLLOW_KEEP_DIST:
+		velocity = to_ally.normalized() * SPEED
+	else:
+		velocity = velocity.move_toward(Vector2.ZERO, SPEED * delta * 10.0)
+	return true
+
+
 func set_objective(node: Node2D) -> void:
 	_objective = node
+
+
+func _apply_unit_type() -> void:
+	match unit_type:
+		UnitType.KNIGHT:
+			max_health = KNIGHT_HEALTH
+			drain_rate = KNIGHT_DRAIN
+		UnitType.HEALER:
+			drain_rate = 0.0
+
+
+func _type_color() -> Color:
+	if unit_type == UnitType.HEALER:
+		return Color(0.6, 0.3, 0.95) if team == Team.BAD else Color(1.5, 1.5, 1.6)
+	if unit_type == UnitType.KNIGHT:
+		return Color(0.5, 0.12, 0.12) if team == Team.BAD else Color(0.15, 0.2, 0.6)
+	return Color.WHITE
+
+
+func _apply_unit_color() -> void:
+	$Sprite2D.modulate = _type_color()
+
+
+func upgrade_to(t: UnitType) -> void:
+	unit_type = t
+	_apply_unit_type()
+	_health_bar.max_value = max_health
+	health = max_health
+	_health_bar.value = health
+	_health_bar.visible = false
+	_apply_unit_color()
+	Effects.burst(global_position, _type_color(), 14)
 
 
 func _create_march_label() -> void:

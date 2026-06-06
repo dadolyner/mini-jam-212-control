@@ -8,6 +8,12 @@ bg_color = Color(0.78, 0.18, 0.18, 0.92)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill"]
 bg_color = Color(0.2, 0.75, 0.28, 0.95)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mana_bg"]
+bg_color = Color(0.05, 0.05, 0.22, 0.92)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mana_fill"]
+bg_color = Color(0.28, 0.18, 0.82, 0.95)
+
 [node name="Hud" type="CanvasLayer" unique_id=843215730]
 script = ExtResource("1_hud")
 
@@ -49,4 +55,31 @@ theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 48
 text = "BAD 50%"
 horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ManaBar" type="ProgressBar" parent="."]
+anchor_left = 0.75
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_top = 108.0
+offset_bottom = 158.0
+grow_horizontal = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_mana_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_mana_fill")
+max_value = 20.0
+value = 20.0
+show_percentage = false
+
+[node name="ManaBarLabel" type="Label" parent="ManaBar"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 26
+text = "Mana 20/20"
+horizontal_alignment = 1
 vertical_alignment = 1
