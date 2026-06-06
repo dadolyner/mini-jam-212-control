@@ -14,8 +14,10 @@ const _POOL_SIZE := 8
 const _SOUND_DIR := "res://assets/Pixel Adventure/Sounds/"
 
 const _FILES := {
-	"convert_bad": "power_up.wav",   
-	"convert_good": "coin.wav",     
+	"convert_bad": "power_up.wav",
+	"convert_good": "coin.wav",
+	"castle_corrupt": "explosion.wav",
+	"castle_purify": "teleport.mp3",
 }
 
 var _streams := {}

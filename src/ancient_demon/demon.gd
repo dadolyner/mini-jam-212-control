@@ -21,8 +21,26 @@ var corruption_drain_rate: float = 11.0
 var corruption_timer: float = 0.0
 @export var corruption_duration: float = 5.0
 
+@onready var _camera: Camera2D = $Camera2D
+var _shake_amount: float = 0.0
+
+func _ready() -> void:
+	Effects.shake_requested.connect(_on_shake_requested)
+
+func _on_shake_requested(amount: float) -> void:
+	_shake_amount = max(_shake_amount, amount)
+
+func _update_shake(delta: float) -> void:
+	if _shake_amount <= 0.1:
+		_shake_amount = 0.0
+		_camera.offset = Vector2.ZERO
+		return
+	_camera.offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * _shake_amount
+	_shake_amount = max(_shake_amount - 40.0 * delta, 0.0)
+
 func _physics_process(delta: float) -> void:
 	move(delta)
+	_update_shake(delta)
 
 	if not corrupting:
 		if Input.is_action_just_pressed("summon"):

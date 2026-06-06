@@ -15,12 +15,19 @@ enum Team { GOOD, BAD }
 @onready var _health_bar: ProgressBar = $HealthBar
 @onready var _detection_shape: CollisionShape2D = $DetectionArea/CollisionShape2D
 
+const RETREAT_FRAC := 0.1      # na 10% healtha gredo do castla se healat
+const RECOVER_FRAC := 0.7      # na 70% healtha se nehajo healat pr castlu
+const OBJECTIVE_REACH := 450.0 # da ne gredo direkt do castla, se prej ustavijo
+
 var health: float
 var _state := State.IDLE
 var _state_timer := 0.0
 var _move_dir := Vector2.ZERO
-var _targets: Array[Npc] = []                  
+var _targets: Array[Npc] = []
 var _converting := false
+var _objective: Node2D = null  # kam gredo uniti k jim je blo ukazano nekaj
+var _retreating := false
+var _march_label: Label
 
 
 func _ready() -> void:
@@ -32,6 +39,8 @@ func _ready() -> void:
 	_health_bar.max_value = max_health
 	_health_bar.value = health
 	_health_bar.visible = false
+
+	_create_march_label()
 
 	$DetectionArea.body_entered.connect(_on_body_entered)
 	$DetectionArea.body_exited.connect(_on_body_exited)
@@ -58,6 +67,8 @@ func _physics_process(delta: float) -> void:
 
 	if target:
 		velocity = (target.global_position - global_position).normalized() * SPEED
+	elif _move_to_destination():
+		pass
 	else:
 		_wander(delta)
 
@@ -67,6 +78,7 @@ func _physics_process(delta: float) -> void:
 		_pick_next_state()
 
 	_apply_drain(delta)
+	_update_march_label()
 
 	$Sprite2D.flip_h = velocity.x < 0.0
 
@@ -133,6 +145,9 @@ func _convert() -> void:
 	if convert_sound != "":
 		SoundManager.play(convert_sound)
 
+	var pop := Color(1.0, 0.3, 0.3) if team == Team.GOOD else Color(0.3, 0.9, 0.4)
+	Effects.burst(global_position, pop, 12)
+
 	var replacement := scene.instantiate()
 	replacement.position = global_position
 	get_parent().call_deferred("add_child", replacement)
@@ -166,4 +181,64 @@ func _nearest_target() -> Npc:
 		if d < best_dist:
 			best_dist = d
 			best = t
+	return best
+
+
+func set_objective(node: Node2D) -> void:
+	_objective = node
+
+
+func _create_march_label() -> void:
+	_march_label = Label.new()
+	_march_label.text = "Charging!"
+	_march_label.visible = false
+	_march_label.size = Vector2(100, 18)
+	_march_label.position = Vector2(-50, -52)
+	_march_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_march_label.add_theme_font_size_override("font_size", 14)
+	_march_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.35))
+	_march_label.add_theme_color_override("font_outline_color", Color.BLACK)
+	_march_label.add_theme_constant_override("outline_size", 4)
+	add_child(_march_label)
+
+
+func _update_march_label() -> void:
+	var marching := _objective != null and is_instance_valid(_objective) and not _retreating
+	if _march_label.visible != marching:
+		_march_label.visible = marching
+
+
+func _move_to_destination() -> bool:
+	if team == Team.GOOD:
+		if _retreating and health >= RECOVER_FRAC * max_health:
+			_retreating = false
+		elif not _retreating and health <= RETREAT_FRAC * max_health:
+			_retreating = true
+		if _retreating:
+			var refuge := _nearest_castle(team)
+			if refuge:
+				velocity = (refuge.global_position - global_position).normalized() * SPEED
+				return true
+
+	if _objective != null and is_instance_valid(_objective):
+		var to_obj := _objective.global_position - global_position
+		if to_obj.length() <= OBJECTIVE_REACH:
+			_objective = null
+		else:
+			velocity = to_obj.normalized() * SPEED
+			return true
+	return false
+
+
+func _nearest_castle(of_team: int) -> Node2D:
+	var best: Node2D = null
+	var best_dist := INF
+	for c in get_tree().get_nodes_in_group("castle"):
+		var castle := c as Node2D
+		if castle == null or castle.get("team") != of_team:
+			continue
+		var d := global_position.distance_squared_to(castle.global_position)
+		if d < best_dist:
+			best_dist = d
+			best = castle
 	return best

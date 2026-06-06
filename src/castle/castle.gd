@@ -15,8 +15,9 @@ const CORRUPT_TINT := Color(0.45, 0.3, 0.6)
 @export var regen_rate := 30.0     
 @export var decay_rate := 20.0     
 @export var turret_drain := 8.0    
-@export var heal_rate := 12.0      
+@export var heal_rate := 12.0
 @export var spawn_interval := 30.0
+@export var order_interval := 20.0  #Kok pogosto pošilja unite v rangu v nasprotn grad
 
 @onready var _sprite: Sprite2D = $Sprite2D
 @onready var _health_bar: ProgressBar = $HealthBar
@@ -26,6 +27,7 @@ const CORRUPT_TINT := Color(0.45, 0.3, 0.6)
 var health: float
 var _npcs: Array[Npc] = []    #za trackanje kolk je NPCjev okol
 var _spawn_timer := 0.0
+var _order_timer := 0.0
 
 
 func _ready() -> void:
@@ -37,12 +39,14 @@ func _ready() -> void:
 	_health_bar.max_value = max_health
 	_update_health_display()
 
+	add_to_group("castle")
 	GameManager.register_castle(team)
 
 	$DetectionArea.body_entered.connect(_on_body_entered)
 	$DetectionArea.body_exited.connect(_on_body_exited)
 
 	_spawn_timer = spawn_interval
+	_order_timer = order_interval
 	_refresh_visuals()
 	queue_redraw()
 
@@ -82,6 +86,7 @@ func _physics_process(delta: float) -> void:
 	_run_turret(delta)
 	_run_aura(delta)
 	_tick_spawn(delta)
+	_tick_orders(delta)
 
 
 func _flip_to(new_team: Team) -> void:
@@ -91,6 +96,15 @@ func _flip_to(new_team: Team) -> void:
 	GameManager.castle_changed_team(old_team, new_team)
 	_refresh_visuals()
 	queue_redraw()
+
+	if new_team == Team.BAD:
+		Effects.burst(global_position, Color(0.6, 0.25, 0.8), 48)
+		Effects.shake(14.0)
+		SoundManager.play("castle_corrupt")
+	else:
+		Effects.burst(global_position, Color(0.3, 0.9, 0.4), 48)
+		Effects.shake(8.0)
+		SoundManager.play("castle_purify")
 
 
 func _update_health_display() -> void:
@@ -129,6 +143,35 @@ func _tick_spawn(delta: float) -> void:
 	var angle := randf() * TAU
 	npc.position = global_position + Vector2(cos(angle), sin(angle)) * 120.0
 	get_parent().add_child(npc)
+
+
+func _tick_orders(delta: float) -> void:
+	_order_timer -= delta
+	if _order_timer > 0.0:
+		return
+	_order_timer = order_interval
+
+	var enemy_castle := _nearest_enemy_castle()
+	if enemy_castle == null:
+		return
+	# Send the friendly units currently defending this castle to assault the enemy stronghold.
+	for n in _npcs:
+		if is_instance_valid(n) and n.team == team:
+			n.set_objective(enemy_castle)
+
+
+func _nearest_enemy_castle() -> Node2D:
+	var best: Node2D = null
+	var best_dist := INF
+	for c in get_tree().get_nodes_in_group("castle"):
+		var castle := c as Castle
+		if castle == null or castle == self or castle.team == team:
+			continue
+		var d := global_position.distance_squared_to(castle.global_position)
+		if d < best_dist:
+			best_dist = d
+			best = castle
+	return best
 
 func _on_body_entered(body: Node) -> void:
 	var npc := body as Npc

@@ -23,6 +23,7 @@ buses/default_bus_layout=""
 
 SoundManager="*res://src/autoload/sound_manager.gd"
 GameManager="*uid://7qncl0ibeiyi"
+Effects="*res://src/autoload/effects.gd"
 
 [display]
 
