@@ -58,11 +58,11 @@ func _ready() -> void:
 		_edges.append([Vector2(x, _MAP_T), PI])            # top    — jagged up
 		x += _EDGE_STEP
 
-	var y := _MAP_T + _EDGE_STEP * 0.5
-	while y < _MAP_B + _EDGE_STEP:
-		_edges.append([Vector2(_MAP_L, y), -PI * 0.5])    # left   — jagged left
-		_edges.append([Vector2(_MAP_R, y),  PI * 0.5])    # right  — jagged right
-		y += _EDGE_STEP
+	var ey := _MAP_T + _EDGE_STEP * 0.5
+	while ey < _MAP_B + _EDGE_STEP:
+		_edges.append([Vector2(_MAP_L, ey), -PI * 0.5])    # left   — jagged left
+		_edges.append([Vector2(_MAP_R, ey),  PI * 0.5])    # right  — jagged right
+		ey += _EDGE_STEP
 
 	queue_redraw()
 

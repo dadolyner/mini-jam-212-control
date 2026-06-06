@@ -48,7 +48,7 @@ func _try_upgrade(type: Npc.UnitType, cost: int) -> void:
 	if not GameManager.try_spend_mana(cost):
 		return
 	unit.upgrade_to(type)
-	SoundManager.play("power_up")
+	SoundManager.play("convert_bad")
 
 func _nearest_bad_unit(skip_type: Npc.UnitType) -> Npc:
 	var best: Npc = null
