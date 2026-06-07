@@ -11,23 +11,13 @@ const _TILE_SCALE = 0.20
 const _FLOOR_STEP = 44.0
 const _EDGE_STEP  = 44.0
 
-const _MAP_L = -3000.0
-const _MAP_R =  4000.0
-const _MAP_T = -2500.0
-const _MAP_B =  3500.0
+const _MAP_L = -2100.0
+const _MAP_R =  2800.0
+const _MAP_T = -1750.0
+const _MAP_B =  2450.0
 
-# Corridor walls — must match StaticBody2D shapes in main.tscn
 const _WALL_COLOR := Color(0.28, 0.28, 0.32)
-const _WALLS: Array = [
-	Rect2(  400, -930, 1000, 60),   # WallA — upper horizontal
-	Rect2(-1100, 1370,  800, 60),   # WallB — mid-left horizontal
-	Rect2( 1770, -400,   60, 1000), # WallC — center-right vertical
-	Rect2( 1850, 1770,  700, 60),   # WallD — lower-right horizontal
-	Rect2(-1030, -800,   60, 800),  # WallE — upper-left vertical
-	Rect2(  950, 2370,  900, 60),   # WallF — lower horizontal
-	Rect2( 2770, -700,   60, 600),  # WallG — upper-right vertical
-	Rect2( -150, -830,  500, 60),   # WallH — upper-center horizontal
-]
+const _WALLS: Array = []
 
 var _floor_dest: Array[Rect2] = []
 var _floor_src:  Array[Rect2] = []

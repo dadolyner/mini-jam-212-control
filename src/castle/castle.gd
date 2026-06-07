@@ -162,6 +162,9 @@ func _tick_spawn(delta: float) -> void:
 
 
 func _tick_orders(delta: float) -> void:
+	if not GameManager.marches_enabled:
+		return
+
 	_order_timer -= delta
 	if _order_timer > 0.0:
 		return

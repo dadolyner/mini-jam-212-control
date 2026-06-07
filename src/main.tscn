@@ -1,182 +1,183 @@
 [gd_scene format=3 uid="uid://daxg1lxosgdyo"]
 
 [ext_resource type="Script" uid="uid://rd54mb8xwesb" path="res://src/main.gd" id="1_5q4o7"]
-[ext_resource type="Script" path="res://src/ui/upgrade_preview.gd" id="10_upgprev"]
 [ext_resource type="PackedScene" uid="uid://dr668wvrpenb5" path="res://src/castle/castle.tscn" id="2_castle"]
+[ext_resource type="PackedScene" uid="uid://df6plip2y0mqw" path="res://src/goodNPC/goodNPC.tscn" id="3_good"]
 [ext_resource type="PackedScene" uid="uid://dcacbpk0wusy4" path="res://src/ancient_demon/demon.tscn" id="4_3cfgd"]
+[ext_resource type="PackedScene" uid="uid://bnwdtmq2vpmvo" path="res://src/badNPC/badNPC.tscn" id="4_bad"]
 [ext_resource type="PackedScene" uid="uid://dhudscene0001" path="res://src/ui/hud.tscn" id="5_hud"]
-
-[sub_resource type="NavigationPolygon" id="NavPoly_001"]
-agent_radius = 14.0
-parsed_geometry_type = 1
-outlines = [PackedVector2Array(-2950, -2450, 3950, -2450, 3950, 3450, -2950, 3450)]
+[ext_resource type="Script" uid="uid://dgeuxnlcxye5s" path="res://src/background.gd" id="6_bg"]
+[ext_resource type="Script" uid="uid://d0r4hqm3i3db4" path="res://src/ui/upgrade_preview.gd" id="10_upgprev"]
 
 [sub_resource type="RectangleShape2D" id="ShapeTopBot"]
-size = Vector2(7200, 80)
+size = Vector2(5040, 80)
 
 [sub_resource type="RectangleShape2D" id="ShapeSides"]
-size = Vector2(80, 6200)
+size = Vector2(80, 4340)
 
-[sub_resource type="RectangleShape2D" id="ShapeWallA"]
-size = Vector2(1000, 60)
+[sub_resource type="NavigationPolygon" id="NavPoly_001"]
+vertices = PackedVector2Array(2765, 2415, -2065, 2415, -2065, -1715, 2765, -1715)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-2065, -1715, 2765, -1715, 2765, 2415, -2065, 2415)])
+parsed_geometry_type = 1
+agent_radius = 14.0
 
-[sub_resource type="RectangleShape2D" id="ShapeWallB"]
-size = Vector2(800, 60)
-
-[sub_resource type="RectangleShape2D" id="ShapeWallC"]
-size = Vector2(60, 1000)
-
-[sub_resource type="RectangleShape2D" id="ShapeWallD"]
-size = Vector2(700, 60)
-
-[sub_resource type="RectangleShape2D" id="ShapeWallE"]
-size = Vector2(60, 800)
-
-[sub_resource type="RectangleShape2D" id="ShapeWallF"]
-size = Vector2(900, 60)
-
-[sub_resource type="RectangleShape2D" id="ShapeWallG"]
-size = Vector2(60, 600)
-
-[sub_resource type="RectangleShape2D" id="ShapeWallH"]
-size = Vector2(500, 60)
-
-[node name="Main" type="Node2D" unique_id=464101160]
+[node name="Main" type="Node2D" unique_id=1564211331]
 script = ExtResource("1_5q4o7")
 
-[node name="zgori" type="StaticBody2D" parent="." unique_id=806904111]
+[node name="Background" type="Node2D" parent="." unique_id=1708790069]
+z_index = -5
+script = ExtResource("6_bg")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="zgori" unique_id=1494828907]
-position = Vector2(500, -2500)
+[node name="zgori" type="StaticBody2D" parent="." unique_id=2098159166]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="zgori" unique_id=1333998869]
+position = Vector2(350, -1750)
 shape = SubResource("ShapeTopBot")
 
-[node name="spodi" type="StaticBody2D" parent="." unique_id=1658151914]
+[node name="spodi" type="StaticBody2D" parent="." unique_id=1388737980]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="spodi" unique_id=1983184309]
-position = Vector2(500, 3500)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="spodi" unique_id=1645303985]
+position = Vector2(350, 2450)
 shape = SubResource("ShapeTopBot")
 
-[node name="levo" type="StaticBody2D" parent="." unique_id=58238096]
+[node name="levo" type="StaticBody2D" parent="." unique_id=752429229]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="levo" unique_id=1330616788]
-position = Vector2(-3000, 500)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="levo" unique_id=1485280232]
+position = Vector2(-2100, 350)
 shape = SubResource("ShapeSides")
 
-[node name="desno" type="StaticBody2D" parent="." unique_id=2026334582]
+[node name="desno" type="StaticBody2D" parent="." unique_id=567603082]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="desno" unique_id=545678456]
-position = Vector2(4000, 500)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="desno" unique_id=253739985]
+position = Vector2(2800, 350)
 shape = SubResource("ShapeSides")
 
-[node name="Castle_TL" parent="." unique_id=358923771 instance=ExtResource("2_castle")]
-position = Vector2(-1800, -1600)
+[node name="DividingWall" type="StaticBody2D" parent="." unique_id=1044153708]
 
-[node name="Castle_TC" parent="." unique_id=523596160 instance=ExtResource("2_castle")]
-position = Vector2(500, -1900)
+[node name="Visual" type="Polygon2D" parent="DividingWall" unique_id=2124357591]
+color = Color(0.35, 0.32, 0.42, 1)
+polygon = PackedVector2Array(-40, -1820, 40, -1820, 40, 2520, -40, 2520)
 
-[node name="Castle_TR" parent="." unique_id=1957806026 instance=ExtResource("2_castle")]
-position = Vector2(2800, -1400)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DividingWall" unique_id=1296541024]
+position = Vector2(0, 350)
+shape = SubResource("ShapeSides")
 
-[node name="Castle_CL" parent="." unique_id=1996247234 instance=ExtResource("2_castle")]
-position = Vector2(-500, 0)
+[node name="Castle1" parent="." unique_id=851106326 instance=ExtResource("2_castle")]
+position = Vector2(-1050, 0)
 
-[node name="Castle_L" parent="." unique_id=541421099 instance=ExtResource("2_castle")]
-position = Vector2(-2400, 500)
+[node name="Castle2" parent="." unique_id=523312961 instance=ExtResource("2_castle")]
+position = Vector2(1120, -700)
 
-[node name="Castle_R" parent="." unique_id=1859174385 instance=ExtResource("2_castle")]
-position = Vector2(3500, 400)
+[node name="Castle3" parent="." unique_id=119205343 instance=ExtResource("2_castle")]
+position = Vector2(1820, 980)
 
-[node name="Castle_BL" parent="." unique_id=1758628586 instance=ExtResource("2_castle")]
-position = Vector2(-1300, 2200)
-team = 1
+[node name="C1a" parent="." unique_id=1616990092 instance=ExtResource("3_good")]
+position = Vector2(-938, 0)
 
-[node name="Castle_BC" parent="." unique_id=686442471 instance=ExtResource("2_castle")]
-position = Vector2(600, 2700)
+[node name="C1b" parent="." unique_id=1329032478 instance=ExtResource("3_good")]
+position = Vector2(-1162, 0)
 
-[node name="Castle_BR" parent="." unique_id=1158248625 instance=ExtResource("2_castle")]
-position = Vector2(3000, 2600)
+[node name="C1c" parent="." unique_id=696724844 instance=ExtResource("3_good")]
+position = Vector2(-994, 112)
 
-[node name="WallA" type="StaticBody2D" parent="." unique_id=222001000]
+[node name="C1d" parent="." unique_id=1887924625 instance=ExtResource("3_good")]
+position = Vector2(-1106, 112)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallA" unique_id=222001001]
-position = Vector2(900, -900)
-shape = SubResource("ShapeWallA")
+[node name="C1e" parent="." unique_id=559944368 instance=ExtResource("3_good")]
+position = Vector2(-994, -112)
 
-[node name="WallB" type="StaticBody2D" parent="." unique_id=222002000]
+[node name="C1f" parent="." unique_id=1454707781 instance=ExtResource("3_good")]
+position = Vector2(-1106, -112)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallB" unique_id=222002001]
-position = Vector2(-700, 1400)
-shape = SubResource("ShapeWallB")
+[node name="C2a" parent="." unique_id=1734652392 instance=ExtResource("3_good")]
+position = Vector2(1232, -700)
 
-[node name="WallC" type="StaticBody2D" parent="." unique_id=222003000]
+[node name="C2b" parent="." unique_id=1264097972 instance=ExtResource("3_good")]
+position = Vector2(1008, -700)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallC" unique_id=222003001]
-position = Vector2(1800, 100)
-shape = SubResource("ShapeWallC")
+[node name="C2c" parent="." unique_id=350682268 instance=ExtResource("3_good")]
+position = Vector2(1176, -595)
 
-[node name="WallD" type="StaticBody2D" parent="." unique_id=222004000]
+[node name="C2d" parent="." unique_id=909035876 instance=ExtResource("3_good")]
+position = Vector2(1064, -595)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallD" unique_id=222004001]
-position = Vector2(2200, 1800)
-shape = SubResource("ShapeWallD")
+[node name="C2e" parent="." unique_id=1480450500 instance=ExtResource("3_good")]
+position = Vector2(1176, -805)
 
-[node name="WallE" type="StaticBody2D" parent="." unique_id=222005000]
+[node name="C2f" parent="." unique_id=487793295 instance=ExtResource("3_good")]
+position = Vector2(1064, -805)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallE" unique_id=222005001]
-position = Vector2(-1000, -400)
-shape = SubResource("ShapeWallE")
+[node name="C3a" parent="." unique_id=1270911156 instance=ExtResource("3_good")]
+position = Vector2(1932, 980)
 
-[node name="WallF" type="StaticBody2D" parent="." unique_id=222006000]
+[node name="C3b" parent="." unique_id=1840838675 instance=ExtResource("3_good")]
+position = Vector2(1708, 980)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallF" unique_id=222006001]
-position = Vector2(1400, 2400)
-shape = SubResource("ShapeWallF")
+[node name="C3c" parent="." unique_id=1070448828 instance=ExtResource("3_good")]
+position = Vector2(1876, 1085)
 
-[node name="WallG" type="StaticBody2D" parent="." unique_id=222007000]
+[node name="C3d" parent="." unique_id=1621722775 instance=ExtResource("3_good")]
+position = Vector2(1764, 1085)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallG" unique_id=222007001]
-position = Vector2(2800, -400)
-shape = SubResource("ShapeWallG")
+[node name="C3e" parent="." unique_id=1019260108 instance=ExtResource("3_good")]
+position = Vector2(1876, 875)
 
-[node name="WallH" type="StaticBody2D" parent="." unique_id=222008000]
+[node name="C3f" parent="." unique_id=762215920 instance=ExtResource("3_good")]
+position = Vector2(1764, 875)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallH" unique_id=222008001]
-position = Vector2(100, -800)
-shape = SubResource("ShapeWallH")
+[node name="B1" parent="." unique_id=37394414 instance=ExtResource("4_bad")]
+position = Vector2(-1505, 1050)
 
-[node name="Demon" parent="." unique_id=1610083175 instance=ExtResource("4_3cfgd")]
-position = Vector2(-1742, 2368)
+[node name="B2" parent="." unique_id=686530087 instance=ExtResource("4_bad")]
+position = Vector2(-1610, 1155)
 
-[node name="GoodGuySpawns" type="Node2D" parent="." unique_id=346122330]
+[node name="B3" parent="." unique_id=688949102 instance=ExtResource("4_bad")]
+position = Vector2(-1715, 1050)
 
-[node name="Marker2D" type="Marker2D" parent="GoodGuySpawns" unique_id=1330518771]
-position = Vector2(-1400, -300)
+[node name="Demon" parent="." unique_id=497588313 instance=ExtResource("4_3cfgd")]
+position = Vector2(-1610, 1050)
 
-[node name="Marker2D2" type="Marker2D" parent="GoodGuySpawns" unique_id=1417670820]
-position = Vector2(1900, -700)
-
-[node name="Marker2D3" type="Marker2D" parent="GoodGuySpawns" unique_id=1835261652]
-position = Vector2(-300, 900)
-
-[node name="Marker2D4" type="Marker2D" parent="GoodGuySpawns" unique_id=999390344]
-position = Vector2(2900, 1500)
-
-[node name="Marker2D5" type="Marker2D" parent="GoodGuySpawns" unique_id=552812488]
-position = Vector2(-537, 1762)
-
-[node name="BadGuySpawns" type="Node2D" parent="." unique_id=1782042170]
-
-[node name="Marker2D" type="Marker2D" parent="BadGuySpawns" unique_id=2130602991]
-position = Vector2(-1651, 2864)
-
-[node name="Marker2D2" type="Marker2D" parent="BadGuySpawns" unique_id=377620248]
-position = Vector2(-2267, 2404)
-
-[node name="NavRegion" type="NavigationRegion2D" parent="."]
+[node name="NavRegion" type="NavigationRegion2D" parent="." unique_id=2091787362]
 navigation_polygon = SubResource("NavPoly_001")
 
-[node name="UpgradePreview" type="Node2D" parent="." unique_id=333100001]
+[node name="UpgradePreview" type="Node2D" parent="." unique_id=736497236]
 z_index = 50
 script = ExtResource("10_upgprev")
 
-[node name="Hud" parent="." unique_id=916277287 instance=ExtResource("5_hud")]
+[node name="Hud" parent="." unique_id=955424335 instance=ExtResource("5_hud")]
+
+[node name="Objective" type="CanvasLayer" parent="." unique_id=412204226]
+
+[node name="ObjectiveLabel" type="Label" parent="Objective" unique_id=111364642]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -960.0
+offset_top = 120.0
+offset_right = -40.0
+offset_bottom = 210.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 56
+text = "Objective: Capture the first castle (0/3)"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="BannerLabel" type="Label" parent="Objective" unique_id=1638008868]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.7, 1, 0.75, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 80
+text = "All castles captured!"
+horizontal_alignment = 1
+vertical_alignment = 1

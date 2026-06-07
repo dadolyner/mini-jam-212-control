@@ -1,29 +1,51 @@
 extends Node2D
 
-const GoodNPC = preload("res://src/goodNPC/goodNPC.tscn")
-const BadNPC  = preload("res://src/badNPC/badNPC.tscn")
-const SPAWN_RADIUS = 250.0
+const NEXT_SCENE := "res://src/main.tscn"   #bossfight scene WIP
 
 @onready var _nav_region: NavigationRegion2D = $NavRegion
+@onready var _dividing_wall: StaticBody2D = $DividingWall
+@onready var _objective_label: Label = $Objective/ObjectiveLabel
+@onready var _banner_label: Label = $Objective/BannerLabel
+
+var _marches_started := false
+var _won := false
+
+
+func _enter_tree() -> void:
+	GameManager.reset_run()
 
 
 func _ready() -> void:
-	var bg := preload("res://src/background.gd").new()
-	bg.z_index = -5
-	add_child(bg)
-
 	_nav_region.bake_navigation_polygon(false)
 
-	for marker in $GoodGuySpawns.get_children():
-		_spawn_npcs(GoodNPC, marker.global_position, 10)
-	for marker in $BadGuySpawns.get_children():
-		_spawn_npcs(BadNPC, marker.global_position, 10)
+	GameManager.castle_captured.connect(_on_castle_captured)
+	_banner_label.visible = false
+	_objective_label.text = "Objective: Capture the first castle (0/3)"
+	GameManager.notify_state()
 
 
-func _spawn_npcs(scene: PackedScene, center: Vector2, count: int) -> void:
-	for i in count:
-		var angle := randf() * TAU
-		var dist  := randf_range(50.0, SPAWN_RADIUS)
-		var npc   = scene.instantiate()
-		npc.position = center + Vector2(cos(angle), sin(angle)) * dist
-		add_child(npc)
+func _on_castle_captured(_old_team: int, _new_team: int) -> void:
+	if not _marches_started and GameManager.bad_castles >= 1:
+		_marches_started = true
+		_drop_wall()
+
+	_objective_label.text = "Objective: Capture the castles (%d/3)" % GameManager.bad_castles
+
+	if not _won and GameManager.good_castles == 0:
+		_win()
+
+
+func _drop_wall() -> void:
+	if is_instance_valid(_dividing_wall):
+		_dividing_wall.queue_free()
+	GameManager.marches_enabled = true
+	await get_tree().physics_frame
+	_nav_region.bake_navigation_polygon(false)
+
+
+func _win() -> void:
+	_won = true
+	_objective_label.visible = false
+	_banner_label.visible = true
+	await get_tree().create_timer(2.0).timeout
+	get_tree().change_scene_to_file(NEXT_SCENE)

@@ -2,6 +2,7 @@ extends Node
 
 signal balance_changed(good_ratio: float, bad_ratio: float)
 signal mana_changed(current: int, maximum: int)
+signal castle_captured(old_team: int, new_team: int)
 
 const TEAM_GOOD := 0
 const TEAM_BAD := 1
@@ -19,8 +20,20 @@ var bad_castles := 0
 
 var mana := MAX_MANA
 
+var marches_enabled := false
+
 
 func _ready() -> void:
+	_emit_mana()
+
+func reset_run() -> void:
+	good_npcs = 0
+	bad_npcs = 0
+	good_castles = 0
+	bad_castles = 0
+	mana = MAX_MANA
+	marches_enabled = false
+	_emit()
 	_emit_mana()
 
 func try_spend_mana(amount: int) -> bool:
@@ -38,6 +51,10 @@ func gain_mana(amount: int) -> void:
 
 func _emit_mana() -> void:
 	mana_changed.emit(mana, MAX_MANA)
+
+func notify_state() -> void:
+	_emit()
+	_emit_mana()
 
 
 func register_npc(team: int) -> void:
@@ -74,6 +91,7 @@ func castle_changed_team(old_team: int, new_team: int) -> void:
 	else:
 		bad_castles += 1
 	_emit()
+	castle_captured.emit(old_team, new_team)
 
 
 func _good_score() -> int:
