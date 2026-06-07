@@ -31,6 +31,8 @@ func _ready() -> void:
 	Effects.shake_requested.connect(_on_shake_requested)
 
 	if get_tree().get_first_node_in_group("king"):
+		GameManager.bad_npcs = GameManager.bad_npcs_saved
+		GameManager.bad_npcs_saved = 0
 		_summon_army()
 
 func _on_shake_requested(amount: float) -> void:
@@ -151,6 +153,8 @@ func _teleport_to_king() -> void:
 	if not GameManager.try_spend_mana(10):
 		return
 
+	GameManager.bad_npcs_saved = GameManager.bad_npcs
+
 	Effects.burst(global_position, Color.MAGENTA, 12)
 	Effects.shake(4.0)
 	SoundManager.play("castle_purify")
@@ -159,7 +163,7 @@ func _teleport_to_king() -> void:
 
 
 func _summon_army() -> void:
-	var count := GameManager.bad_npcs
+	var count := GameManager.bad_npcs if GameManager.bad_npcs > 0 else GameManager.bad_npcs_saved
 	for i in count:
 		var offset := Vector2(randf_range(-120.0, 120.0), randf_range(-120.0, 120.0))
 		spawn_minion_at(global_position + offset)

@@ -105,3 +105,5 @@ position = Vector2(-500, 0)
 
 [node name="King" parent="." unique_id=1022348286 instance=ExtResource("3_king")]
 position = Vector2(500, 0)
+
+[node name="BadNpcs" type="Node2D" parent="." unique_id=598535253]

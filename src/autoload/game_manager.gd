@@ -15,6 +15,7 @@ const CASTLE_WEIGHT := 5   # 1 grad = 5 minionov
 
 var good_npcs := 0
 var bad_npcs := 0
+var bad_npcs_saved := 0
 var good_castles := 0
 var bad_castles := 0
 

@@ -66,6 +66,14 @@ shape = SubResource("ShapeSides")
 [node name="Castle1" parent="." unique_id=851106326 instance=ExtResource("2_castle")]
 position = Vector2(-1050, 0)
 
+[node name="Bg" type="ColorRect" parent="Castle1" unique_id=45847405]
+z_index = -1
+offset_left = -800.0
+offset_top = -500.0
+offset_right = 800.0
+offset_bottom = 500.0
+color = Color(0.07, 0.06, 0.09, 1)
+
 [node name="Castle2" parent="." unique_id=523312961 instance=ExtResource("2_castle")]
 position = Vector2(1120, -700)
 
