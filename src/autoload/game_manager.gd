@@ -7,7 +7,7 @@ signal castle_captured(old_team: int, new_team: int)
 const TEAM_GOOD := 0
 const TEAM_BAD := 1
 
-const MAX_MANA := 20
+const MAX_MANA := 100
 const COST_HEALER := 8
 const COST_KNIGHT := 12
 

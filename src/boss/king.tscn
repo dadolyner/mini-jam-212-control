@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://bossking01"]
+
+[ext_resource type="Script" uid="uid://bbps2oleq1c35" path="res://src/boss/king.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://d1hfs71pd7n84" path="res://assets/sprites/ villager-blue.png" id="2_skin"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vdzdf"]
+radius = 160.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fhmoy"]
+bg_color = Color(0.9, 0.1, 0.1, 1)
+
+[node name="King" type="Area2D" unique_id=1378324632]
+script = ExtResource("1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1315943161]
+shape = SubResource("CircleShape2D_vdzdf")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1611885917]
+position = Vector2(-2, -21)
+scale = Vector2(3, 3)
+texture = ExtResource("2_skin")
+
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=1889014808]
+offset_left = -80.0
+offset_top = -200.0
+offset_right = 80.0
+offset_bottom = -185.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_fhmoy")
+step = 0.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="." unique_id=1335830694]
+offset_left = -60.0
+offset_top = -220.0
+offset_right = 60.0
+offset_bottom = -200.0
+theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 16
+text = "THE KING"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DpsLabel" type="Label" parent="." unique_id=165846813]
+offset_left = -100.0
+offset_top = -170.0
+offset_right = 100.0
+offset_bottom = -150.0
+theme_override_colors/font_color = Color(0.9, 0.5, 0.2, 1)
+theme_override_font_sizes/font_size = 12
+text = "Approach or click to fight"
+horizontal_alignment = 1
+vertical_alignment = 1

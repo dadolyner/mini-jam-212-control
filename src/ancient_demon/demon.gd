@@ -30,6 +30,9 @@ func _ready() -> void:
 	add_to_group("player")
 	Effects.shake_requested.connect(_on_shake_requested)
 
+	if get_tree().get_first_node_in_group("king"):
+		_summon_army()
+
 func _on_shake_requested(amount: float) -> void:
 	_shake_amount = max(_shake_amount, amount)
 
@@ -82,6 +85,9 @@ func _physics_process(delta: float) -> void:
 			_try_upgrade(Npc.UnitType.HEALER, GameManager.COST_HEALER)
 		if Input.is_action_just_pressed("upgrade_knight"):
 			_try_upgrade(Npc.UnitType.KNIGHT, GameManager.COST_KNIGHT)
+
+		if Input.is_action_just_pressed("to_king"):
+			_teleport_to_king()
 
 	if corrupting:
 		corruption_timer -= delta
@@ -141,10 +147,28 @@ func end_corruption() -> void:
 			m.queue_free()
 	minions.clear()
 
-func spawn_minion() -> void:
+func _teleport_to_king() -> void:
+	if not GameManager.try_spend_mana(10):
+		return
+
+	Effects.burst(global_position, Color.MAGENTA, 12)
+	Effects.shake(4.0)
+	SoundManager.play("castle_purify")
+
+	get_tree().change_scene_to_file("res://src/levels/boss_arena.tscn")
+
+
+func _summon_army() -> void:
+	var count := GameManager.bad_npcs
+	for i in count:
+		var offset := Vector2(randf_range(-120.0, 120.0), randf_range(-120.0, 120.0))
+		spawn_minion_at(global_position + offset)
+
+
+func spawn_minion_at(pos: Vector2) -> void:
 	var minion: Node2D = Node2D.new()
 	minion.name = "Minion"
-	minion.global_position = global_position
+	minion.global_position = pos
 
 	var script: Script = preload("res://src/ancient_demon/minion.gd")
 	minion.set_script(script)
@@ -160,3 +184,7 @@ func spawn_minion() -> void:
 		parent.add_child(minion)
 
 	minions.append(minion)
+
+
+func spawn_minion() -> void:
+	spawn_minion_at(global_position)
