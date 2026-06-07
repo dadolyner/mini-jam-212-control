@@ -150,7 +150,7 @@ func end_corruption() -> void:
 	minions.clear()
 
 func _teleport_to_king() -> void:
-	if not GameManager.try_spend_mana(10):
+	if not GameManager.boss_unlocked:
 		return
 
 	GameManager.bad_npcs_saved = GameManager.bad_npcs

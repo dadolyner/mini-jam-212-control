@@ -1,7 +1,5 @@
 extends Node2D
 
-const NEXT_SCENE := "res://src/main.tscn"   #bossfight scene WIP
-
 @onready var _nav_region: NavigationRegion2D = $NavRegion
 @onready var _dividing_wall: StaticBody2D = $DividingWall
 @onready var _objective_label: Label = $Objective/ObjectiveLabel
@@ -46,6 +44,6 @@ func _drop_wall() -> void:
 func _win() -> void:
 	_won = true
 	_objective_label.visible = false
+	_banner_label.text = "Now press \"T\" to teleport to the boss fight."
 	_banner_label.visible = true
-	await get_tree().create_timer(2.0).timeout
-	get_tree().change_scene_to_file(NEXT_SCENE)
+	GameManager.boss_unlocked = true

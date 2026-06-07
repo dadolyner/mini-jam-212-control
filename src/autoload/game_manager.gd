@@ -22,6 +22,7 @@ var bad_castles := 0
 var mana := MAX_MANA
 
 var marches_enabled := false
+var boss_unlocked := false
 
 
 func _ready() -> void:
@@ -34,6 +35,7 @@ func reset_run() -> void:
 	bad_castles = 0
 	mana = MAX_MANA
 	marches_enabled = false
+	boss_unlocked = false
 	_emit()
 	_emit_mana()
 
